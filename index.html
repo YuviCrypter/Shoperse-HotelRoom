@@ -8,6 +8,8 @@
     <link rel="stylesheet" href="TemplateData/style.css">
   </head>
   <body>
+    <div id="lo" class="loadingoverlay" style="height:100vh; width:100vw; background-color:rgb(165, 165, 165); z-index:3; position:absolute; display: flex; align-items: center; justify-content: center; color: rgb(58, 58, 58); ">
+      The Room Preview is loading...</div>
     <div style="display:flex">
       <div id="full">
         <div id="unity-container" class="unity-desktop">
@@ -25,16 +27,9 @@
             <div id="unity-build-title">Shoperse</div>
           </div> -->
         </div>
-        <div id="popup" class="popup">
-          <iframe id="frame" src="" style="position:fixed; height: 80vh; width:80vw; z-index:1; "></iframe>
-          <!-- <button id="popupclose" onclick="ClosePopup()" style="z-index: 1; height:40px;width:40px; transform: translate(38vw,-34vh);  display: inline-block; content: '\00d7';  background-image: url(close.png); background-size: cover; background-color: rgba(255, 255, 255, 0); border:none;"></button> -->
-          <div onclick="ClosePopup()" class="close-btn" style="z-index: 2; position: fixed; height:40px;width:40px; "></div>
-          <button onclick="ClosePopup()" style="position:fixed; height: 100vh; width:100vw; background-color:rgba(255, 255, 255, 0); "></button>
-        </div>
       </div>
       <div id="fullscreen-btn" class="fullscreen-btn" onclick="FullScreen()"></div>
     </div>
-    <script src="airtable.js" ></script>
     <script>
       var container = document.querySelector("#unity-container");
       var canvas = document.querySelector("#unity-canvas");
@@ -70,9 +65,9 @@
       var buildUrl = "Build";
       var loaderUrl = buildUrl + "/Builds.loader.js";
       var config = {
-        dataUrl: buildUrl + "/Builds.data.unityweb",
-        frameworkUrl: buildUrl + "/Builds.framework.js.unityweb",
-        codeUrl: buildUrl + "/Builds.wasm.unityweb",
+        dataUrl: buildUrl + "/Builds.data.gz",
+        frameworkUrl: buildUrl + "/Builds.framework.js.gz",
+        codeUrl: buildUrl + "/Builds.wasm.gz",
         streamingAssetsUrl: "StreamingAssets",
         companyName: "Shoperse Think Strategy",
         productName: "Shoperse",
@@ -123,85 +118,11 @@
       };
       document.body.appendChild(script);
     </script>
+   
     <script>
-      var NameOfUser;
-      var recordOfUser;
-      var AvatarOfUser;
-      var ProfileOfUser;
-      console.log("works");
-      // Function which receives a message from Unity
-      function receiveMessageFromUnity(txt) {
-         // Get element to assign the message
-        //  const lblMessage = document.getElementById("lblMessage");
-
-         // Assign received from Unity message
-        var Airtable = require('airtable');
-        var base = new Airtable({apiKey: 'key638uMDOhThTkcO'}).base('apppAxwZkdH86oRdx');
-        
-        console.log("this is the user id" + txt);
-         base('Table 1').select({
-        maxRecords: 1,
-        filterByFormula:`UserID="${txt}"`
-        }).firstPage(function(err,records){
-
-        records.forEach( function(record) {
-        NameOfUser = record.get('Name');
-        AvatarOfUser = record.get('URL');
-        ProfileOfUser = record.get('UserPicURL');
-        recordOfUser = record.getId();
-        console.log(AvatarOfUser);
-        sendMessageToUnity();
-        });
-        
-
-}, function done(err) {
-if (err) { console.error(err); return; }
-});
-      }
-
-      // Function which sends the message to Unity
-      function sendMessageToUnity() {
-         // Get the input field
-        //  const txtMessage = document.getElementById("txtMessage");
-         // Get the message
-        var message = AvatarOfUser;
-        var dpurl = ProfileOfUser;
-         // Clear the input field
-        //  txtMessage.value = "";
-        console.log(message);
-         // Send message to the Unity scene
-         // Params: "Target object in the scene", "Function name", "Parameters"
-         gameInstance.SendMessage(
-            "[Bridge]",
-            "ReceiveMessageFromPage",
-            message
-         );
-         gameInstance.SendMessage(
-            "[Bridge]",
-            "ReceiveProfileFromPage",
-            dpurl
-         );
-      }
-
-      function receivePopupFromUnity(url){
-        console.log(url);
-        if(url == "ClosePopup"){
-          ClosePopup();
-          return;
-        }
-          var popup = document.getElementById("popup");
-          popup.style.visibility= 'visible';
-          console.log("popup");
-          var frame = document.getElementById("frame");
-          frame.src = url;
-        
-        
-      }
+      
       var elem = document.getElementById("full");
-      function ClosePopup(){
-        var popup = document.getElementById("popup");
-        popup.style.visibility="hidden";
-      }
+      
       function FullScreen(){
         if (elem.requestFullscreen) {
           elem.requestFullscreen();
@@ -210,6 +131,14 @@ if (err) { console.error(err); return; }
         } else if (elem.msRequestFullscreen) { /* IE11 */
           elem.msRequestFullscreen();
         }
+      }
+
+      function CloseOverlay(){
+        // document.getElementById("lo").style.height = 0;
+        // document.getElementById("lo").style.width = 0;
+        var lo = document.getElementById("lo");
+        lo.parentNode.removeChild(lo);
+        console.log("Closing");
       }
    </script>
     
