@@ -44,13 +44,25 @@ body { padding: 0; margin: 0; background-color:black;}
     position: fixed;
     z-index: 2;
     margin:10px;
-    width: 40px;
-    height: 40px;
-    background: url('fullscreen-button.png') no-repeat center;
+    width: 20vh;
+    height: 7vh;
+    background: url('FullScreenBC.png') no-repeat center;
     background-size: cover;
-    left: 0%;
-    bottom: 1%;
+    left: 3%;
+    bottom: 4%;
 }
+
+.fullscreen-btn:active{
+        position: fixed;
+        z-index: 2;
+        margin:10px;
+        width: 20vh;
+        height: 7vh;
+        background: url('FullAC.png') no-repeat center;
+        background-size: cover;
+        left: 3%;
+        bottom: 5%;
+    }
 
 @-webkit-keyframes cube {
     0% {
