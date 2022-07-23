@@ -40,6 +40,12 @@
       </div>
       <div id="fullscreen-btn" class="fullscreen-btn" onclick="FullScreen()"></div>
     </div>
+    <div id="popup" class="popup">
+      <iframe id="frame" src="" style="position:fixed; height: 80vh; width:80vw; z-index:1; "></iframe>
+      <!-- <button id="popupclose" onclick="ClosePopup()" style="z-index: 1; height:40px;width:40px; transform: translate(38vw,-34vh);  display: inline-block; content: '\00d7';  background-image: url(close.png); background-size: cover; background-color: rgba(255, 255, 255, 0); border:none;"></button> -->
+      <div onclick="ClosePopup()" class="close-btn" style="z-index: 2; position: fixed; height:40px;width:40px; "></div>
+      <button onclick="ClosePopup()" style="position:fixed; height: 100vh; width:100vw; background-color:rgba(255, 255, 255, 0); "></button>
+    </div>
     <script>
       var container = document.querySelector("#unity-container");
       var canvas = document.querySelector("#unity-canvas");
@@ -100,7 +106,7 @@
         unityShowBanner('WebGL builds are not supported on mobile devices.');
       } else {
         canvas.style.width = "100vw";
-        canvas.style.height = "99vh";
+        canvas.style.height = "98vh";
       }
       loadingBar.style.display = "block";
       var gameInstance;
@@ -147,6 +153,25 @@
         document.getElementById("lo").style.height = 0;
         document.getElementById("lo").style.width = 0;
         console.log("Closing");
+      }
+      function ClosePopup(){
+        var popup = document.getElementById("popup");
+        popup.style.visibility="hidden";
+      }
+
+      function receivePopupFromUnity(url){
+        console.log(url);
+        if(url == "ClosePopup"){
+          ClosePopup();
+          return;
+        }
+          var popup = document.getElementById("popup");
+          popup.style.visibility= 'visible';
+          console.log("popup");
+          var frame = document.getElementById("frame");
+          frame.src = url;
+        
+        
       }
    </script>
     
